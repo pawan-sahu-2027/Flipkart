@@ -4,13 +4,18 @@ import com.scaler.flipkart.Dto.FakeStoreCategoryDto;
 import com.scaler.flipkart.Dto.FakeStoreProductDto;
 import com.scaler.flipkart.Models.Category;
 import com.scaler.flipkart.Models.Product;
+import com.scaler.flipkart.exceptions.CategoryNotFoundException;
+import com.scaler.flipkart.exceptions.ProductNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("FakeStoreProductService")
 public class FakeStoreProductService implements  ProductService{
     private RestTemplate restTemplate;
     public FakeStoreProductService (RestTemplate restTemplate){
@@ -18,10 +23,22 @@ public class FakeStoreProductService implements  ProductService{
     }
 
     @Override
-    public Product getSingleProduct(Long productId) {
-        FakeStoreProductDto p  = restTemplate.getForObject("https://fakestoreapi.com/products/"
+    public ResponseEntity<Product> getSingleProduct(Long productId) throws ProductNotFoundException {
+//        FakeStoreProductDto p  = restTemplate.getForObject("https://fakestoreapi.com/products/"
+//                + productId , FakeStoreProductDto.class);
+//
+//             return p.toProduct();
+        ResponseEntity<FakeStoreProductDto> p  = restTemplate.getForEntity("https://fakestoreapi.com/products/"
                 + productId , FakeStoreProductDto.class);
-        return p.toProduct();
+
+        if (p.getBody() == null){
+            throw new ProductNotFoundException(" Product not found with Id" + productId);
+        }
+
+//       return ResponseEntity.status(p.getStatusCode()).body(p.getBody().toProduct());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(p.getBody().toProduct());
+
+
     }
     public List<Product> getAllProduct (){
         List<Product> list = new ArrayList<>();
@@ -33,7 +50,8 @@ public class FakeStoreProductService implements  ProductService{
     }
 
     @Override
-    public List<Product> findProductByCategory(String category) {
+    public List<Product> findProductByCategory(String category)  throws CategoryNotFoundException, ProductNotFoundException{
+        //  CategoryDto categoryDto  = restTemplate.getForObject()
         List<Product> productList = new ArrayList<>();
         FakeStoreProductDto [] fakeStoreProductDtos = restTemplate.getForObject
                 ("https://fakestoreapi.com/products/category/" +category  , FakeStoreProductDto[].class  );
@@ -98,9 +116,13 @@ public class FakeStoreProductService implements  ProductService{
 
         return fsp.toProduct();
     }
-     public  void   deleteAproduct(Long productId){
+     public  void   deleteAproduct(Long productId) throws ProductNotFoundException {
+
+            FakeStoreProductDto fr = restTemplate.getForObject("https://fakestoreapi.com/products/" + productId , FakeStoreProductDto.class);
+            if (fr == null){
+                throw new ProductNotFoundException ("Their is no product exist  with this Id " + productId);
+            }
             restTemplate.delete("https://fakestoreapi.com/products/" + productId);
-            return;
 
      }
 

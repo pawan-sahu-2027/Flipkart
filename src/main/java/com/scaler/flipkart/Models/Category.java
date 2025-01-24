@@ -1,24 +1,28 @@
 package com.scaler.flipkart.Models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-@Setter
-@Getter
+import java.util.List;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+@Entity
+public class Category extends BaseModel{
+//    public List<Product> getListOfProduct() {
+//        return listOfProduct;
+//    }
+//
+//    public void setListOfProduct(List<Product> listOfProduct) {
+//        this.listOfProduct = listOfProduct;
+//    }
 
     public String getTitle() {
         return title;
@@ -27,6 +31,7 @@ public class Category {
     public void setTitle(String title) {
         this.title = title;
     }
-    private Long id;
+
+
     private String title;
 }

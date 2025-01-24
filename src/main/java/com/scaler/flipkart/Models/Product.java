@@ -1,25 +1,19 @@
 package com.scaler.flipkart.Models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
+@Entity
 //@NoArgsConstructor
 //@AllArgsConstructor
-public class Product {
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+public class Product extends BaseModel{
 
     public String getTitle() {
         return title;
@@ -60,10 +54,11 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-    private Long id;
+
     private String title;
     private double price;
     private String description;
     private String imageUrl;
+    @ManyToOne (cascade = {CascadeType.PERSIST})
     private Category category;
 }
