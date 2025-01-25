@@ -1,19 +1,18 @@
 package com.scaler.flipkart.Service;
 
-import com.scaler.flipkart.Controler.ProductController;
 import com.scaler.flipkart.Models.Category;
 import com.scaler.flipkart.Models.Product;
 import com.scaler.flipkart.Repository.CategoryRepository;
 import com.scaler.flipkart.Repository.ProductRepository;
 import com.scaler.flipkart.exceptions.CategoryNotFoundException;
 import com.scaler.flipkart.exceptions.ProductNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service("selfProductService")
 public class SelfProductService implements ProductService{
     //private final ProductController productController;
@@ -92,28 +91,39 @@ public class SelfProductService implements ProductService{
         return productRepository.save(p);
 
     }
-//public Product createProduct(Product product) {
-//    Category cat = categoryRepository.findByTitle(product.getCategory().getTitle());
-//    if (cat == null){
-//        Category newCat = new Category();
-//        newCat.setTitle(product.getCategory().getTitle());
-//        Category newRow = categoryRepository.save(newCat);
-//        product.setCategory(newRow);
-//    }
-//    else {
-//        product.setCategory(cat);
-//    }
-//    Product saveproduct = productRepository.save(product);
-//    return saveproduct;
-//}
+
     @Override
-    public Product modifyProductDetails(Product product) {
-        return null;
+    public Product modifyProductDetails(Product product) throws ProductNotFoundException {
+        Product p = productRepository.getById(product.getId());
+        Optional<Product> pro = productRepository.findById(product.getId());
+          if (pro.isEmpty()){
+              throw new ProductNotFoundException(" this is no product available with Id" + product.getId());
+          }
+          else {
+              p.setDescription(product.getDescription());
+              p.setPrice(product.getPrice());
+              p.setImageUrl(product.getImageUrl());
+
+          }
+        Product upDatedProduct = productRepository.save(p);
+        return upDatedProduct;
     }
 
     @Override
-    public Product upDateProductDetail(Product product) {
-        return null;
+    public Product upDateProductDetail(Product product) throws ProductNotFoundException {
+        Product p = productRepository.getById(product.getId());
+        Optional <Product> pro = productRepository.findById(product.getId());
+        if (pro.isEmpty()){
+            throw new ProductNotFoundException(" this is no product available with Id" + product.getId());
+        }
+        else {
+            p.setDescription(product.getDescription());
+            p.setPrice(product.getPrice());
+            p.setImageUrl(product.getImageUrl());
+
+        }
+        Product upDatedProduct = productRepository.save(p);
+        return upDatedProduct;
     }
 
     @Override

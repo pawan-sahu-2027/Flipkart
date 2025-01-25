@@ -9,7 +9,9 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "base_model_seq")
+    @SequenceGenerator(name = "base_model_seq", sequenceName = "base_model_sequence", allocationSize = 0
+    )
    private Long id;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -27,6 +27,7 @@ public class ProductController {
         this.productService = productService;
         this.selfProductService = selfProductService;
     }
+    // problem
     @GetMapping("/Product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") Long productid ) throws ProductNotFoundException {
            ResponseEntity< Product> product = productService.getSingleProduct(productid);
@@ -40,6 +41,7 @@ public class ProductController {
           }
         return productList;
     }
+    // not working
     @GetMapping("/Product/Category/{category}")
     public  List<Product> getProductBycategory  (@PathVariable ("category") String cat) throws CategoryNotFoundException , ProductNotFoundException {
         List<Product> pr = productService.findProductByCategory(cat);
@@ -55,18 +57,20 @@ public class ProductController {
     public Product makeProduct (@RequestBody Product product){
         return selfProductService.createProduct(product);
      }
-
+     // not working
      @PutMapping("/Product")
-    public Product upDateProduct (@RequestBody() Product product ){
+    public Product upDateProduct (@RequestBody() Product product ) throws ProductNotFoundException{
         Product p = productService.modifyProductDetails(product);
         return p;
 
      }
+     // not working
      @PatchMapping("/Product")
-     public Product upDateField (@RequestBody() Product product){
+     public Product upDateField (@RequestBody() Product product) throws ProductNotFoundException{
         Product p = productService.upDateProductDetail(product);
         return p;
      }
+     // not working
      @DeleteMapping("/Product/{id}")
     public void removeProduct (@PathVariable("id")  Long productId) throws ProductNotFoundException{
            productService.deleteAproduct(productId);

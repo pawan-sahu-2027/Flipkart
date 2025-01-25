@@ -14,7 +14,7 @@ public interface ProductService {
      List<Product> findProductByCategory(String category) throws CategoryNotFoundException , ProductNotFoundException;
      List<Category> getAllCategory();
      Product createProduct(Product product);
-     Product modifyProductDetails(Product product);
-     Product upDateProductDetail (Product product);
+     Product modifyProductDetails(Product product) throws ProductNotFoundException;
+     Product upDateProductDetail (Product product) throws ProductNotFoundException;
      void  deleteAproduct(Long productId) throws ProductNotFoundException;
 }
